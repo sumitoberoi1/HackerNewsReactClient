@@ -47,7 +47,9 @@ class App extends Component {
         <input type="text" onChange = {this.onSearchChange}/>
       </form>
         {
-          this.state.list.filter(item => item.title.toLowerCase().includes(this.state.searchTerm.toLocaleLowerCase())).map(item => 
+          this.state.list
+          .filter(item => item.title.toLowerCase().includes(this.state.searchTerm.toLocaleLowerCase()))
+          .map(item => 
             <div key = {item.objectID}>
               <span>
                 <a href = {item.url}>{item.title}</a>
