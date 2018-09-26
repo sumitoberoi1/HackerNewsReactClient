@@ -55,20 +55,15 @@ class App extends Component {
   }
 }
 
-class Search extends Component {
-  render() {
-    const {value,onChange, children} = this.props;
+function Search({value,onChange,children}) {
     return (
       <form>
        {children} <input type="text" onChange = {onChange} value={value}/>
       </form>
     )
-  }
 }
 
-class Table extends Component {
-  render () {
-    const { list, pattern,onDismiss } = this.props;
+function Table({list, pattern,onDismiss}) {
     return (
       <div>
         {
@@ -86,16 +81,9 @@ class Table extends Component {
         }
       </div>
     )
-  } 
 }
 
-class Button extends Component {
-  render() {
-    const {
-      onClick,
-      className = '',
-      children
-    } = this.props;
+function Button( {onClick,className = '', children}) {
     return(
       <button onClick = {onClick}
               className = {className}
@@ -103,7 +91,6 @@ class Button extends Component {
               {children}
       </button>
     )
-  }
 }
 
 export default App;
