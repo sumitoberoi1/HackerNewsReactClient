@@ -40,15 +40,40 @@ class App extends Component {
   }
 
   render() {
-    const hello = ` 1 road to learning react with var`;
+    const {searchTerm,list} = this.state
     return (
       <div className = "App">
+        <Search value={searchTerm} 
+                onChange={this.onSearchChange}
+        >Search</Search>
+        <Table list = {list}
+                pattern = {searchTerm}
+                onDismiss = {this.onDismiss}
+        />
+      </div>  
+    );
+  }
+}
+
+class Search extends Component {
+  render() {
+    const {value,onChange, children} = this.props;
+    return (
       <form>
-        <input type="text" onChange = {this.onSearchChange}/>
+       {children} <input type="text" onChange = {onChange} value={value}/>
       </form>
+    )
+  }
+}
+
+class Table extends Component {
+  render () {
+    const { list, pattern,onDismiss } = this.props;
+    return (
+      <div>
         {
-          this.state.list
-          .filter(item => item.title.toLowerCase().includes(this.state.searchTerm.toLocaleLowerCase()))
+          list
+          .filter(item => item.title.toLowerCase().includes(pattern.toLocaleLowerCase()))
           .map(item => 
             <div key = {item.objectID}>
               <span>
@@ -56,14 +81,28 @@ class App extends Component {
               </span>
               <span>{item.author}</span>
               <span>{item.points}</span>
-              <span> <button onClick={() => this.onDismiss(item.objectID)} type="button">Dismiss</button></span>
+              <span> <Button onClick = {() => onDismiss(item.objectID)}>Dismiss</Button></span>
             </div>)
         }
-        {
-          console.log(`this is a log`)
-        }
       </div>
-    );
+    )
+  } 
+}
+
+class Button extends Component {
+  render() {
+    const {
+      onClick,
+      className = '',
+      children
+    } = this.props;
+    return(
+      <button onClick = {onClick}
+              className = {className}
+              type = "button">
+              {children}
+      </button>
+    )
   }
 }
 
