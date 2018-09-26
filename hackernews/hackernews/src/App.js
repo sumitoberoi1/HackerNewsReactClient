@@ -55,16 +55,12 @@ class App extends Component {
   }
 }
 
-function Search({value,onChange,children}) {
-    return (
+const Search = ({value,onChange,children}) => 
       <form>
        {children} <input type="text" onChange = {onChange} value={value}/>
       </form>
-    )
-}
 
-function Table({list, pattern,onDismiss}) {
-    return (
+const Table = ({list, pattern,onDismiss}) => 
       <div>
         {
           list
@@ -80,17 +76,12 @@ function Table({list, pattern,onDismiss}) {
             </div>)
         }
       </div>
-    )
-}
 
-function Button( {onClick,className = '', children}) {
-    return(
+const Button = ({onClick,className = '', children}) => 
       <button onClick = {onClick}
               className = {className}
               type = "button">
               {children}
       </button>
-    )
-}
 
 export default App;
