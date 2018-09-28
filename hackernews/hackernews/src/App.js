@@ -20,16 +20,38 @@ const list = [
     objectID: 1,
   },
 ];
+const DEFAULT_QUERY = 'redux';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}`;
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list,
-      searchTerm : ''
+      result:null,
+      searchTerm : DEFAULT_QUERY
     };
+    this.setSearchTopStories = this.setSearchTopStories.bind(this);
+    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
   }
+
+  setSearchTopStories(result) {
+    this.setState({result});
+  }
+
+  async fetchSearchTopStories(searchTerm) {
+    try {
+      const response = await fetch(`${url}${searchTerm}`)
+      const result = await response.json();
+      this.setSearchTopStories(result);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   onDismiss(objectID) {
     console.log(this);
     const modifiedList = this.state.list.filter(item=>item.objectID !== objectID);
@@ -39,8 +61,16 @@ class App extends Component {
     this.setState({searchTerm:event.target.value});
   }
 
+  componentDidMount() {
+    const {searchTerm} = this.state;
+    this.fetchSearchTopStories(searchTerm);
+  }
+
   render() {
-    const {searchTerm,list} = this.state
+    const {searchTerm,result} = this.state
+    if (!result) {
+      return null;
+    }
     return (
       <div className = "page">
         <div className = "interactions">
@@ -49,7 +79,7 @@ class App extends Component {
                     onChange={this.onSearchChange}
             >Search</Search>
           </div>
-          <Table list = {list}
+          <Table list = {result.hits}
                   pattern = {searchTerm}
                   onDismiss = {this.onDismiss}
           />
