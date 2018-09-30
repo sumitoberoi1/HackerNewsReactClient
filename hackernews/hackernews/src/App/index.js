@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import Search from '../Search/index';
+import Table from '../Table/index';
+import Button from '../Button';
 import './App.css';
+
 
 import { 
   DEFAULT_QUERY,
@@ -119,48 +123,6 @@ class App extends Component {
   }
 }
 
-const Search = ({value,onChange,children,onSubmit}) => 
-      <form onSubmit={onSubmit}>
-       {children} 
-       <input type="text" onChange = {onChange} value={value}/>
-       <button type="submit">{children}</button>
-      </form>
 
-const Table = ({list,onDismiss}) => 
-      <div className = "table">
-        {
-          list
-          .map(item => 
-          <div key = {item.objectID} className="table-row">
-            <span style={{ width: '40%' }}>
-            <a href={item.url}>{item.title}</a>
-            </span>
-            <span style={{ width: '30%' }}>
-              {item.author}
-            </span>
-            <span style={{ width: '10%' }}>
-              {item.num_comments}
-            </span>
-            <span style={{ width: '10%' }}>
-              {item.points}
-            </span>
-            <span style={{ width: '10%' }}>
-              <Button
-                onClick={() => onDismiss(item.objectID)}
-                className="button-inline"
-              >
-                Dismiss
-              </Button>
-            </span>
-          </div>)
-        }
-      </div>
-
-const Button = ({onClick,className = '', children}) => 
-      <button onClick = {onClick}
-              className = {className}
-              type = "button">
-              {children}
-      </button>
 
 export default App;
