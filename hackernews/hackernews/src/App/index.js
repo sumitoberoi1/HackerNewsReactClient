@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { isString } from 'util';
 
-const DEFAULT_QUERY = 'redux';
-const PATH_BASE = 'https://hn.algolia.com/api/v';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const DEFAULT_HPP = '100';
-const PARAM_HPP = 'hitsPerPage='
+import { 
+  DEFAULT_QUERY,
+  DEFAULT_HPP,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  PARAM_HPP
+}  from '../constants';
+
 const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}`;
 
 class App extends Component {
@@ -48,11 +49,13 @@ class App extends Component {
 
   async fetchSearchTopStories(searchTerm,page = 0) {
     try {
+      console.log(`API url: ${url}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`);
       const response = await fetch(`${url}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`);
       const result = await response.json();
       this.setState({searchKey:searchTerm});
       this.setSearchTopStories(result);
     } catch (e) {
+      console.log(e);
         this.setState({error:e})
     }
   }
