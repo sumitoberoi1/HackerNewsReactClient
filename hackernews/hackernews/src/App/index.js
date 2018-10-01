@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Search from '../Search/index';
 import Table from '../Table/index';
 import Button from '../Button';
+import Loading from '../Loading';
 import fetch from 'isomorphic-fetch';
 import './App.css';
 
@@ -25,7 +26,8 @@ class App extends Component {
       results:null,
       searchKey:'',
       searchTerm : DEFAULT_QUERY,
-      error:null
+      error:null,
+      isLoading:false
     };
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
@@ -43,7 +45,8 @@ class App extends Component {
     this.setState({
       results: {
         ...results,
-        [searchKey]: {hits:updatedHits,page}
+        [searchKey]: {hits:updatedHits,page},
+        isLoading:false
       }
     })
   }
@@ -54,7 +57,7 @@ class App extends Component {
 
   async fetchSearchTopStories(searchTerm,page = 0) {
     try {
-      console.log(`API url: ${url}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`);
+      this.setState({ isLoading : true})
       const response = await fetch(`${url}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`);
       const result = await response.json();
       this.setState({searchKey:searchTerm});
@@ -94,12 +97,10 @@ class App extends Component {
   }
 
   render() {
-    const {searchTerm,results,searchKey, error} = this.state
+    const {searchTerm,results,searchKey, error, isLoading} = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0;
     const list = (results && results[searchKey] && results[searchKey].hits) || [];
-    if (error) {
-      
-    }
+   
     return (
       <div className = "page">
         <div className = "interactions">
@@ -116,7 +117,8 @@ class App extends Component {
             :<Table list = {list}
                   onDismiss = {this.onDismiss}/>}
             <div className = "interactions">
-              <Button onClick = {() => this.fetchSearchTopStories(searchKey, page+1)}>More</Button>
+              {isLoading ? <Loading /> : 
+              <Button onClick = {() => this.fetchSearchTopStories(searchKey, page+1)}>More</Button>}
             </div>
         </div>  
       </div>
