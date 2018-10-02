@@ -26,9 +26,7 @@ class App extends Component {
       searchKey:'',
       searchTerm : DEFAULT_QUERY,
       error:null,
-      isLoading:false,
-      isSortReverse:false,
-      sortKey:'NONE'
+      isLoading:false
     };
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
@@ -36,7 +34,6 @@ class App extends Component {
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
-    this.onSort = this.onSort.bind(this);
   }
 
   setSearchTopStories(result) {
@@ -53,10 +50,6 @@ class App extends Component {
     })
   }
 
-  onSort(sortKey) {
-    const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse
-    this.setState({ sortKey, isSortReverse });
-  }
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm];
   }
@@ -103,7 +96,7 @@ class App extends Component {
   }
 
   render() {
-    const {searchTerm,results,searchKey, error, isLoading, sortKey, isSortReverse} = this.state
+    const {searchTerm,results,searchKey, error, isLoading} = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0;
     const list = (results && results[searchKey] && results[searchKey].hits) || [];
    
@@ -121,10 +114,7 @@ class App extends Component {
               <p>Something went wrong</p>
             </div>
             :<Table list = {list}
-                  onDismiss = {this.onDismiss}
-                  sortKey = {sortKey}
-                  onSort = {this.onSort}
-                  isSortReverse = {isSortReverse}/>}
+                  onDismiss = {this.onDismiss}/>}
             <div className = "interactions">
               <ButtonWithLoading isLoading={isLoading} 
                                 onClick = {() => this.fetchSearchTopStories(searchKey, page+1)}>More</ButtonWithLoading>
