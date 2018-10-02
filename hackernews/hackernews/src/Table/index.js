@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component} from 'react';
 import Button from '../Button';
 import PropTypes from 'prop-types';
 import { sortBy } from 'lodash';
+
 import Sort from '../Sort';
 const SORTS = {
   NONE: list => list,
@@ -10,7 +11,9 @@ const SORTS = {
   COMMENTS: list => sortBy(list, 'num_comments').reverse(),
   POINTS: list => sortBy(list, 'points').reverse()
 }
-const Table = ({list,onDismiss, sortKey, onSort, isSortReverse}) => {
+class Table extends Component {
+  render() {
+    const {list,onDismiss, sortKey, onSort, isSortReverse} = this.props;
     const sortedList = SORTS[sortKey](list);
     const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList;
     return(
@@ -83,7 +86,8 @@ const Table = ({list,onDismiss, sortKey, onSort, isSortReverse}) => {
           </div>)
         }
       </div>);
-}
+  }
+} 
 Table.propTypes = {
   list:PropTypes.arrayOf(
     PropTypes.shape({
