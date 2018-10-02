@@ -6,8 +6,6 @@ import Loading from '../Loading';
 import fetch from 'isomorphic-fetch';
 import './App.css';
 
-
-
 import { 
   DEFAULT_QUERY,
   DEFAULT_HPP,
@@ -29,6 +27,7 @@ class App extends Component {
       searchTerm : DEFAULT_QUERY,
       error:null,
       isLoading:false,
+      isSortReverse:false,
       sortKey:'NONE'
     };
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
@@ -55,7 +54,8 @@ class App extends Component {
   }
 
   onSort(sortKey) {
-    this.setState({ sortKey });
+    const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse
+    this.setState({ sortKey, isSortReverse });
   }
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm];
@@ -103,7 +103,7 @@ class App extends Component {
   }
 
   render() {
-    const {searchTerm,results,searchKey, error, isLoading, sortKey} = this.state
+    const {searchTerm,results,searchKey, error, isLoading, sortKey, isSortReverse} = this.state
     const page = (results && results[searchKey] && results[searchKey].page) || 0;
     const list = (results && results[searchKey] && results[searchKey].hits) || [];
    
@@ -123,7 +123,8 @@ class App extends Component {
             :<Table list = {list}
                   onDismiss = {this.onDismiss}
                   sortKey = {sortKey}
-                  onSort = {this.onSort}/>}
+                  onSort = {this.onSort}
+                  isSortReverse = {isSortReverse}/>}
             <div className = "interactions">
               <ButtonWithLoading isLoading={isLoading} 
                                 onClick = {() => this.fetchSearchTopStories(searchKey, page+1)}>More</ButtonWithLoading>

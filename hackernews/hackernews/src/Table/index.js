@@ -10,7 +10,10 @@ const SORTS = {
   COMMENTS: list => sortBy(list, 'num_comments').reverse(),
   POINTS: list => sortBy(list, 'points').reverse()
 }
-const Table = ({list,onDismiss, sortKey, onSort}) => 
+const Table = ({list,onDismiss, sortKey, onSort, isSortReverse}) => {
+    const sortedList = SORTS[sortKey](list);
+    const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList;
+    return(
       <div className = "table">
         <div className="table-header">
         <span style={{ width: '40%' }}>
@@ -50,7 +53,7 @@ const Table = ({list,onDismiss, sortKey, onSort}) =>
           </span>
         </div>
         {
-          SORTS[sortKey](list)
+          reverseSortedList
           .map(item => 
           <div key = {item.objectID} className="table-row">
             <span style={{ width: '40%' }}>
@@ -75,7 +78,8 @@ const Table = ({list,onDismiss, sortKey, onSort}) =>
             </span>
           </div>)
         }
-      </div>
+      </div>);
+}
 Table.propTypes = {
   list:PropTypes.arrayOf(
     PropTypes.shape({
