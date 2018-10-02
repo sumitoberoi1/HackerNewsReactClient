@@ -1,11 +1,56 @@
 import React from 'react';
 import Button from '../Button';
 import PropTypes from 'prop-types';
-
-const Table = ({list,onDismiss}) => 
+import { sortBy } from 'lodash';
+import Sort from '../Sort';
+const SORTS = {
+  NONE: list => list,
+  TITLE: list => sortBy(list,'title'),
+  AUTHOR: list => sortBy(list, 'author'),
+  COMMENTS: list => sortBy(list, 'num_comments').reverse(),
+  POINTS: list => sortBy(list, 'points').reverse()
+}
+const Table = ({list,onDismiss, sortKey, onSort}) => 
       <div className = "table">
+        <div className="table-header">
+        <span style={{ width: '40%' }}>
+          <Sort
+            sortKey={'TITLE'}
+            onSort={onSort}
+          >
+            Title
+          </Sort>
+        </span>
+        <span style={{ width: '30%' }}>
+          <Sort
+            sortKey={'AUTHOR'}
+            onSort={onSort}
+          >
+            Author
+          </Sort>
+        </span>
+        <span style={{ width: '10%' }}>
+          <Sort
+            sortKey={'COMMENTS'}
+            onSort={onSort}
+          >
+            Comments
+          </Sort>
+        </span>
+        <span style={{ width: '10%' }}>
+          <Sort
+            sortKey={'POINTS'}
+            onSort={onSort}
+            >
+              Points
+            </Sort>
+          </span>
+          <span style={{ width: '10%' }}>
+            Archive
+          </span>
+        </div>
         {
-          list
+          SORTS[sortKey](list)
           .map(item => 
           <div key = {item.objectID} className="table-row">
             <span style={{ width: '40%' }}>
