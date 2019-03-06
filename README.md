@@ -1,5 +1,7 @@
 Hacker News	
 This is my attempt to create HackerNews client using React
+
+
 I learnt following React Concepts while building this:
 1. Working with react-app
 2. Working with JSX and Javascript within it
